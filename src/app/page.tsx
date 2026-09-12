@@ -38,6 +38,15 @@ export default function HomePage() {
         <SummaryChip label="Siap" value={summary.ready} tone="ready" />
       </div>
 
+      <Button
+        className="h-12 w-full rounded-2xl text-base"
+        nativeButton={false}
+        render={<Link href="/pesanan/baru" />}
+      >
+        <PlusIcon />
+        Catat pesanan baru
+      </Button>
+
       {hasSampleData ? (
         <div className="rounded-2xl border border-[oklch(0.82_0.06_75)] bg-[oklch(0.96_0.03_85)] px-4 py-3 text-sm">
           <p className="font-medium">Ini contoh pesanan untuk dicoba dulu.</p>
@@ -75,14 +84,6 @@ export default function HomePage() {
         </section>
       )}
 
-      <Button
-        className="fixed right-4 bottom-24 z-30 h-14 rounded-full px-5 text-base shadow-lg"
-        nativeButton={false}
-        render={<Link href="/pesanan/baru" />}
-      >
-        <PlusIcon />
-        Pesanan
-      </Button>
     </div>
   )
 }
