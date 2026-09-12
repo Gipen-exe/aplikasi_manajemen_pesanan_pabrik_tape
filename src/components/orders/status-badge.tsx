@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { STATUS_META } from "@/lib/constants"
 import { dueBadgeLabel } from "@/lib/format"
-import { getDueKind } from "@/lib/priority"
+import { getDueKind, isActiveOrder } from "@/lib/priority"
 import type { Order, OrderStatus } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +22,7 @@ export function StatusBadge({ status }: { status: OrderStatus }) {
 }
 
 export function DueBadge({ order }: { order: Order }) {
+  if (!isActiveOrder(order)) return null
   const kind = getDueKind(order)
   const className =
     kind === "overdue"

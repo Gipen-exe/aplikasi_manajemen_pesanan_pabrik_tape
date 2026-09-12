@@ -23,7 +23,11 @@ export function EmptyState({
         {description}
       </p>
       {actionLabel && href ? (
-        <Button className="mt-5 h-11 px-5 text-base" render={<Link href={href} />}>
+        <Button
+          className="mt-5 h-11 px-5 text-base"
+          nativeButton={false}
+          render={<Link href={href} />}
+        >
           {actionLabel}
         </Button>
       ) : null}

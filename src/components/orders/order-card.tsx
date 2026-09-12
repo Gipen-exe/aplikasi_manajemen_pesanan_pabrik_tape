@@ -70,6 +70,7 @@ export function OrderCard({
             <Button
               variant="outline"
               className="h-11 px-3"
+              nativeButton={false}
               render={<a href={wa} target="_blank" rel="noreferrer" />}
             >
               <MessageCircleIcon />

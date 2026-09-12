@@ -114,6 +114,7 @@ export default function OrderDetailPage() {
             <Button
               variant="outline"
               className="h-12 rounded-2xl"
+              nativeButton={false}
               render={<a href={wa} target="_blank" rel="noreferrer" />}
             >
               <MessageCircleIcon />
@@ -128,6 +129,7 @@ export default function OrderDetailPage() {
           <Button
             variant="outline"
             className="h-12 rounded-2xl"
+            nativeButton={false}
             render={<Link href={`/pesanan/${order.id}/edit`} />}
           >
             Ubah

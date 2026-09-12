@@ -256,6 +256,7 @@ export function OrderForm({
                 quantity: Number(event.target.value),
               }))
             }
+            onFocus={(event) => event.currentTarget.select()}
             className="h-12 rounded-2xl text-center text-lg font-semibold"
           />
           <Button

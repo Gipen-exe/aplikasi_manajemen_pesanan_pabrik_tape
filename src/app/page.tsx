@@ -64,7 +64,7 @@ export default function HomePage() {
       ) : (
         <section className="space-y-3">
           <div className="flex items-end justify-between">
-            <h3 className="font-heading text-lg">Didahulukan dulu</h3>
+            <p className="font-heading text-lg">Didahulukan dulu</p>
             <p className="text-xs text-muted-foreground">
               penting, terlambat, lalu yang paling dekat
             </p>
@@ -77,6 +77,7 @@ export default function HomePage() {
 
       <Button
         className="fixed right-4 bottom-24 z-30 h-14 rounded-full px-5 text-base shadow-lg"
+        nativeButton={false}
         render={<Link href="/pesanan/baru" />}
       >
         <PlusIcon />

@@ -99,6 +99,7 @@ export default function OrdersPage() {
 
       <Button
         className="fixed right-4 bottom-24 z-30 h-14 rounded-full px-5 text-base shadow-lg"
+        nativeButton={false}
         render={<Link href="/pesanan/baru" />}
       >
         <PlusIcon />
