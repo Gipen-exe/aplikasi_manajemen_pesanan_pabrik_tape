@@ -65,6 +65,15 @@ export function dueBadgeLabel(order: Order, now = new Date()) {
   return relativeDayLabel(new Date(order.dueAt), now)
 }
 
+export function normalizePhone(phone: string) {
+  return phone.replace(/\D/g, "")
+}
+
+export function isValidWhatsapp(phone: string) {
+  const digits = normalizePhone(phone)
+  return digits.length >= 10 && digits.length <= 15
+}
+
 export function whatsappUrl(phone: string, message?: string) {
   const digits = phone.replace(/\D/g, "")
   if (!digits) return null

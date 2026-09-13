@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import { toast } from "sonner"
-import { DownloadIcon, RotateCcwIcon, Trash2Icon, UploadIcon } from "lucide-react"
+import { DownloadIcon, UploadIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -11,9 +11,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { useFinance } from "@/hooks/use-finance"
 import { useOrders } from "@/hooks/use-orders"
 import { APP_NAME, APP_PLACE } from "@/lib/constants"
-import { exportOrdersPayload, parseImportedOrders } from "@/lib/storage"
+import { exportBackupPayload, parseImportedBackup } from "@/lib/storage"
 
 export function SettingsSheet({
   open,
@@ -22,30 +23,31 @@ export function SettingsSheet({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  const { orders, hasSampleData, clearSamples, resetWithSamples, replaceAll } =
-    useOrders()
+  const { orders, replaceAll } = useOrders()
+  const { entries: finance, replaceAll: replaceFinance } = useFinance()
   const fileRef = useRef<HTMLInputElement>(null)
 
   const downloadBackup = () => {
-    const blob = new Blob([exportOrdersPayload(orders)], {
+    const blob = new Blob([exportBackupPayload(orders, finance)], {
       type: "application/json",
     })
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = url
-    link.download = `cadangan-pesanan-dasiti-${new Date().toISOString().slice(0, 10)}.json`
+    link.download = `cadangan-pesanan-pabrik-tape-${new Date().toISOString().slice(0, 10)}.json`
     link.click()
     URL.revokeObjectURL(url)
-    toast.success("Cadangan pesanan sudah diunduh.")
+    toast.success("Cadangan pesanan dan uang sudah diunduh.")
   }
 
   const onImport = async (file: File | undefined) => {
     if (!file) return
     try {
       const text = await file.text()
-      const imported = parseImportedOrders(text)
-      replaceAll(imported)
-      toast.success(`Berhasil memulihkan ${imported.length} pesanan.`)
+      const imported = parseImportedBackup(text)
+      replaceAll(imported.orders)
+      if (imported.finance) replaceFinance(imported.finance)
+      toast.success(`Berhasil memulihkan ${imported.orders.length} pesanan.`)
       onOpenChange(false)
     } catch {
       toast.error("Berkas cadangan tidak bisa dibaca.")
@@ -58,8 +60,8 @@ export function SettingsSheet({
         <SheetHeader>
           <SheetTitle className="font-heading text-xl">{APP_NAME}</SheetTitle>
           <SheetDescription>
-            Catatan pesanan {APP_NAME} di {APP_PLACE}. Dipakai pemilik yang juga
-            memproduksi. Data tersimpan di HP ini.
+            Pencatat pesanan pabrik tape di {APP_PLACE}. Data tersimpan di HP
+            ini, tanpa akun.
           </SheetDescription>
         </SheetHeader>
         <div className="space-y-2 px-4 pb-6">
@@ -89,36 +91,9 @@ export function SettingsSheet({
               event.target.value = ""
             }}
           />
-          {hasSampleData ? (
-            <Button
-              variant="outline"
-              className="h-12 w-full justify-start rounded-2xl text-base"
-              onClick={() => {
-                clearSamples()
-                toast.success("Contoh pesanan sudah dihapus.")
-                onOpenChange(false)
-              }}
-            >
-              <Trash2Icon />
-              Hapus contoh pesanan
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="h-12 w-full justify-start rounded-2xl text-base"
-              onClick={() => {
-                resetWithSamples()
-                toast.success("Contoh pesanan ditampilkan lagi.")
-                onOpenChange(false)
-              }}
-            >
-              <RotateCcwIcon />
-              Tampilkan contoh pesanan
-            </Button>
-          )}
-          <p className="pt-3 text-xs leading-relaxed text-muted-foreground">
-            Versi awal ini belum butuh akun. Kalau HP diganti, pakai cadangkan
-            data supaya pesanan tidak hilang.
+          <p className="pt-3 text-sm leading-relaxed text-muted-foreground">
+            Data tersimpan di HP ini. Kalau HP diganti, tekan Cadangkan data
+            dulu.
           </p>
         </div>
       </SheetContent>

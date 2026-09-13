@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+
+# android
+android/.gradle
+android/app/build
+android/build
+android/app/.cxx
+android/local.properties
+android/captures
+
+.vercel
+.env*

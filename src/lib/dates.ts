@@ -21,6 +21,10 @@ export function isSameDay(a: Date, b: Date) {
   )
 }
 
+export function isSameMonth(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
+}
+
 export function greetingFor(now = new Date()) {
   const hour = now.getHours()
   if (hour < 11) return "Selamat pagi"

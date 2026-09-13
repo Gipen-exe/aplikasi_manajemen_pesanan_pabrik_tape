@@ -16,7 +16,7 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  title: `${APP_NAME} — Kelola Pesanan`,
+  title: APP_NAME,
   description: `Aplikasi pencatat pesanan usaha tape di ${APP_PLACE}. Bantu pemilik ingat siapa yang pesan dan mana yang perlu didahulukan.`,
   applicationName: APP_NAME,
   appleWebApp: {

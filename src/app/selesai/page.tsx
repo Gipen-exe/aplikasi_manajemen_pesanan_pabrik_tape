@@ -15,7 +15,8 @@ export default function DonePage() {
       <div>
         <h2 className="font-heading text-2xl">Yang sudah selesai</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Riwayat pesanan yang sudah diambil atau dibatalkan.
+          Riwayat pesanan yang sudah diambil atau dibatalkan. Kalau pelanggan
+          yang sama pesan lagi, tekan Pesan lagi.
         </p>
       </div>
 

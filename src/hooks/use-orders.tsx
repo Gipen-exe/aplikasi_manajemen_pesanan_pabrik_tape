@@ -11,7 +11,6 @@ import {
 import { STORAGE_KEY } from "@/lib/constants"
 import { createId } from "@/lib/format"
 import { isActiveOrder, sortByPriority, summarizeQueue } from "@/lib/priority"
-import { createSeedOrders } from "@/lib/seed"
 import { loadOrders, saveOrders } from "@/lib/storage"
 import type { Order, OrderDraft, OrderStatus } from "@/lib/types"
 
@@ -38,15 +37,16 @@ function subscribe(listener: () => void) {
   }
 }
 
+function withoutSamples(orders: Order[]) {
+  return orders.filter((order) => !order.isSample)
+}
+
 function read(): Order[] {
-  if (memory) return memory
+  if (memory !== null) return memory
   const existing = loadOrders()
-  if (existing) {
-    memory = existing
-    return memory
-  }
-  memory = createSeedOrders()
-  saveOrders(memory)
+  const cleaned = existing ? withoutSamples(existing) : []
+  memory = cleaned
+  if (!existing || cleaned.length !== existing.length) saveOrders(memory)
   return memory
 }
 
@@ -61,22 +61,19 @@ type OrdersContextValue = {
   orders: Order[]
   activeOrders: Order[]
   archivedOrders: Order[]
-  hasSampleData: boolean
   summary: ReturnType<typeof summarizeQueue>
   addOrder: (draft: OrderDraft) => Order
   updateOrder: (id: string, patch: Partial<Order>) => void
   setStatus: (id: string, status: OrderStatus) => void
   removeOrder: (id: string) => void
   replaceAll: (orders: Order[]) => void
-  clearSamples: () => void
-  resetWithSamples: () => void
 }
 
 const OrdersContext = createContext<OrdersContextValue | null>(null)
 
 export function OrdersProvider({ children }: { children: ReactNode }) {
   const orders = useSyncExternalStore(subscribe, read, () => EMPTY)
-  const ready = orders !== EMPTY
+  const ready = useSyncExternalStore(subscribe, () => true, () => false)
 
   const addOrder = useCallback((draft: OrderDraft) => {
     const now = new Date().toISOString()
@@ -115,15 +112,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const replaceAll = useCallback((next: Order[]) => {
-    write(next)
-  }, [])
-
-  const clearSamples = useCallback(() => {
-    write(read().filter((order) => !order.isSample))
-  }, [])
-
-  const resetWithSamples = useCallback(() => {
-    write(createSeedOrders())
+    write(withoutSamples(next))
   }, [])
 
   const value = useMemo<OrdersContextValue>(() => {
@@ -137,27 +126,14 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
       orders,
       activeOrders,
       archivedOrders,
-      hasSampleData: orders.some((order) => order.isSample),
       summary: summarizeQueue(orders),
       addOrder,
       updateOrder,
       setStatus,
       removeOrder,
       replaceAll,
-      clearSamples,
-      resetWithSamples,
     }
-  }, [
-    addOrder,
-    clearSamples,
-    orders,
-    ready,
-    removeOrder,
-    replaceAll,
-    resetWithSamples,
-    setStatus,
-    updateOrder,
-  ])
+  }, [addOrder, orders, ready, removeOrder, replaceAll, setStatus, updateOrder])
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>
 }

@@ -26,6 +26,7 @@ import {
   remainingDebt,
   whatsappUrl,
 } from "@/lib/format"
+import { reorderHref } from "@/lib/reorder"
 import type { OrderStatus } from "@/lib/types"
 
 const FLOW: OrderStatus[] = ["baru", "diproses", "siap", "selesai"]
@@ -43,7 +44,7 @@ export default function OrderDetailPage() {
       <>
         <PageHeader title="Pesanan tidak ketemu" backHref="/" />
         <p className="px-4 pt-6 text-sm text-muted-foreground">
-          Mungkin sudah dihapus, atau ini contoh yang belum ada di HP ini.
+          Mungkin sudah dihapus, atau belum tercatat di HP ini.
         </p>
       </>
     )
@@ -116,6 +117,14 @@ export default function OrderDetailPage() {
             ))}
           </div>
         </section>
+
+        <Button
+          className="h-14 w-full rounded-2xl text-base font-semibold"
+          nativeButton={false}
+          render={<Link href={reorderHref(order.id)} />}
+        >
+          Pesan lagi
+        </Button>
 
         <div className="grid grid-cols-2 gap-2">
           {wa ? (

@@ -1,32 +1,11 @@
-"use client"
+import { NewOrderScreen } from "./new-order-screen"
 
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { PageHeader } from "@/components/app-shell"
-import { OrderForm } from "@/components/orders/order-form"
-import { useOrders } from "@/hooks/use-orders"
-
-export default function NewOrderPage() {
-  const router = useRouter()
-  const { addOrder } = useOrders()
-
-  return (
-    <>
-      <PageHeader
-        title="Catat pesanan"
-        description="Isi nama, wadah Tape Ketan, dan kapan harus diambil atau diantar."
-        backHref="/"
-      />
-      <div className="px-4 pt-5">
-        <OrderForm
-          submitLabel="Simpan pesanan"
-          onSubmit={(draft) => {
-            const order = addOrder(draft)
-            toast.success(`Pesanan ${order.customerName} sudah tercatat.`)
-            router.push(`/pesanan/${order.id}`)
-          }}
-        />
-      </div>
-    </>
-  )
+export default async function NewOrderPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ dari?: string | string[] }>
+}) {
+  const query = await searchParams
+  const fromId = typeof query.dari === "string" ? query.dari : undefined
+  return <NewOrderScreen fromId={fromId} />
 }

@@ -8,6 +8,7 @@ import {
   ClipboardListIcon,
   ListOrderedIcon,
   Settings2Icon,
+  WalletIcon,
 } from "lucide-react"
 import { SettingsSheet } from "@/components/settings-sheet"
 import { APP_NAME } from "@/lib/constants"
@@ -17,12 +18,14 @@ const NAV = [
   { href: "/", label: "Antrian", icon: ListOrderedIcon },
   { href: "/pesanan", label: "Semua", icon: ClipboardListIcon },
   { href: "/selesai", label: "Selesai", icon: CheckCircle2Icon },
+  { href: "/keuangan", label: "Uang", icon: WalletIcon },
 ]
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const hideChrome =
     pathname.startsWith("/pesanan/baru") ||
+    pathname.startsWith("/keuangan/baru") ||
     pathname.includes("/edit") ||
     /^\/pesanan\/[^/]+$/.test(pathname)
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -36,9 +39,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/70 bg-background/90 px-4 py-3 backdrop-blur-md">
         <div>
           <p className="text-[11px] font-medium tracking-[0.16em] text-primary uppercase">
-            Tape ketan
+            Pabrik tape
           </p>
-          <h1 className="font-heading text-xl leading-none">{APP_NAME}</h1>
+          <h1 className="font-heading max-w-[16rem] text-lg leading-tight">{APP_NAME}</h1>
         </div>
         <button
           type="button"
@@ -53,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main className="flex-1 px-4 pb-36 pt-4">{children}</main>
 
       <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-lg border-t border-border/70 bg-background/95 px-3 py-2 backdrop-blur-md">
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid grid-cols-4 gap-1">
           {NAV.map((item) => {
             const active =
               item.href === "/"

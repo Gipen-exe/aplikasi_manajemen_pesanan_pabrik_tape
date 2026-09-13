@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Pesanan Tape</string>
+    <string name="title_activity_main">Pesanan Tape</string>
+    <string name="package_name">com.pabriktape.pesanan</string>
+    <string name="custom_url_scheme">com.pabriktape.pesanan</string>
+</resources>

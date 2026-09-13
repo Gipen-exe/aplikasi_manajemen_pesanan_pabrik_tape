@@ -1,4 +1,6 @@
 import type {
+  FinanceCategory,
+  FinanceKind,
   Fulfillment,
   OrderSource,
   OrderStatus,
@@ -6,16 +8,18 @@ import type {
   TimeSlot,
 } from "./types"
 
-export const APP_NAME = "Tape Ketan Dasiti"
+export const APP_NAME = "Manajemen Pesanan Pabrik Tape"
+export const APP_SHORT_NAME = "Pesanan Tape"
 export const APP_PLACE = "Desa Leuwidingding, Cirebon"
 export const PRODUCT_NAME = "Tape Ketan"
 export const STORAGE_KEY = "tape-ketan-dasiti-orders-v1"
+export const FINANCE_STORAGE_KEY = "tape-ketan-dasiti-finance-v1"
 
 export const PACKAGES = [
   { id: "ember-besar", name: "Ember besar", price: 110_000 },
   { id: "ember-kecil", name: "Ember kecil", price: 75_000 },
-  { id: "kotak-3000", name: "Kotak 3000ml", price: 30_000 },
-  { id: "kotak-2000", name: "Kotak 2000ml", price: 25_000 },
+  { id: "kotak-3000", name: "Kotak 3000ml", price: 50_000 },
+  { id: "kotak-2000", name: "Kotak 2000ml", price: 30_000 },
   { id: "kotak-1500", name: "Kotak 1500ml", price: 20_000 },
   { id: "custom", name: "Wadah custom", price: null },
 ] as const
@@ -66,3 +70,19 @@ export const FULFILLMENT_META: Record<
 
 export const ACTIVE_STATUSES: OrderStatus[] = ["baru", "diproses", "siap"]
 export const ARCHIVE_STATUSES: OrderStatus[] = ["selesai", "batal"]
+
+export const FINANCE_KIND_META: Record<FinanceKind, { label: string }> = {
+  masuk: { label: "Uang masuk" },
+  keluar: { label: "Uang keluar" },
+}
+
+export const FINANCE_CATEGORY_META: Record<
+  FinanceCategory,
+  { label: string; kinds: FinanceKind[] }
+> = {
+  penjualan: { label: "Penjualan tape", kinds: ["masuk"] },
+  bahan: { label: "Beras / gula", kinds: ["keluar"] },
+  wadah: { label: "Wadah", kinds: ["keluar"] },
+  gas: { label: "Gas / bensin", kinds: ["keluar"] },
+  lain: { label: "Lainnya", kinds: ["masuk", "keluar"] },
+}

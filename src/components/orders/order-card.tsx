@@ -11,6 +11,7 @@ import {
   orderWhatsappMessage,
   whatsappUrl,
 } from "@/lib/format"
+import { reorderHref } from "@/lib/reorder"
 import type { Order, OrderStatus } from "@/lib/types"
 
 const nextAction: Partial<
@@ -57,20 +58,28 @@ export function OrderCard({
         </div>
       </Link>
 
-      {action || wa ? (
+      {action || wa || !onStatus ? (
         <div className="mt-4 flex gap-2">
           {action && onStatus ? (
             <Button
-              className="h-11 flex-1 text-base"
+              className="h-12 flex-1 text-base"
               onClick={() => onStatus(order.id, action.status)}
             >
               {action.label}
             </Button>
-          ) : null}
+          ) : (
+            <Button
+              className="h-12 flex-1 text-base"
+              nativeButton={false}
+              render={<Link href={reorderHref(order.id)} />}
+            >
+              Pesan lagi
+            </Button>
+          )}
           {wa ? (
             <Button
               variant="outline"
-              className="h-11 px-3"
+              className="h-12 px-3"
               nativeButton={false}
               render={<a href={wa} target="_blank" rel="noreferrer" />}
             >

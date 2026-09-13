@@ -10,8 +10,7 @@ import { useOrders } from "@/hooks/use-orders"
 import { formatLongDate, greetingFor } from "@/lib/dates"
 
 export default function HomePage() {
-  const { ready, activeOrders, summary, hasSampleData, clearSamples, setStatus } =
-    useOrders()
+  const { ready, activeOrders, summary, setStatus } = useOrders()
 
   if (!ready) return <LoadingScreen />
 
@@ -47,26 +46,10 @@ export default function HomePage() {
         Catat pesanan baru
       </Button>
 
-      {hasSampleData ? (
-        <div className="rounded-2xl border border-[oklch(0.82_0.06_75)] bg-[oklch(0.96_0.03_85)] px-4 py-3 text-sm">
-          <p className="font-medium">Ini contoh pesanan untuk dicoba dulu.</p>
-          <p className="mt-1 text-muted-foreground">
-            Hapus kalau sudah siap dipakai mencatat pesanan asli.
-          </p>
-          <button
-            type="button"
-            onClick={clearSamples}
-            className="mt-2 text-sm font-semibold text-primary underline-offset-2 hover:underline"
-          >
-            Hapus contoh
-          </button>
-        </div>
-      ) : null}
-
       {activeOrders.length === 0 ? (
         <EmptyState
           title="Antrian masih kosong"
-          description="Kalau ada yang pesan Tape Ketan Dasiti, catat di sini supaya tidak lupa siapa yang harus didahulukan."
+          description="Kalau ada yang pesan Tape Ketan, catat di sini supaya tidak lupa siapa yang harus didahulukan."
           actionLabel="Catat pesanan"
           href="/pesanan/baru"
         />

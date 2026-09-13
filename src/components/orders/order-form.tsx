@@ -22,7 +22,7 @@ import {
   toDateInputValue,
   toTimeInputValue,
 } from "@/lib/dates"
-import { formatRupiah } from "@/lib/format"
+import { formatRupiah, isValidWhatsapp } from "@/lib/format"
 import { remainingDebt, settledAmount } from "@/lib/payment"
 import type {
   Fulfillment,
@@ -160,10 +160,12 @@ function Field({
 
 export function OrderForm({
   initial,
+  notice,
   submitLabel,
   onSubmit,
 }: {
   initial?: Order
+  notice?: string
   submitLabel: string
   onSubmit: (draft: OrderDraft) => void
 }) {
@@ -196,6 +198,10 @@ export function OrderForm({
     const name = draft.customerName.trim()
     if (!name) {
       setError("Nama pemesan wajib diisi.")
+      return
+    }
+    if (!isValidWhatsapp(draft.phone)) {
+      setError("Nomor WhatsApp wajib diisi, minimal 10 angka.")
       return
     }
     if (!draft.quantity || draft.quantity <= 0) {
@@ -263,6 +269,12 @@ export function OrderForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 pb-8">
+      {notice ? (
+        <p className="rounded-2xl bg-secondary/80 px-4 py-3 text-sm leading-relaxed">
+          {notice}
+        </p>
+      ) : null}
+
       <Field label="Siapa yang pesan?" htmlFor="customerName">
         <Input
           id="customerName"
@@ -291,7 +303,7 @@ export function OrderForm({
         />
       </Field>
 
-      <Field label="Nomor WhatsApp (opsional)" htmlFor="phone">
+      <Field label="Nomor WhatsApp" htmlFor="phone">
         <Input
           id="phone"
           value={draft.phone}
@@ -300,6 +312,8 @@ export function OrderForm({
           }
           placeholder="08xxxxxxxxxx"
           inputMode="tel"
+          autoComplete="tel"
+          required
           className="h-12 rounded-2xl px-3 text-base"
         />
       </Field>
