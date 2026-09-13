@@ -36,7 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/70 bg-background/90 px-4 py-3 backdrop-blur-md">
         <div>
           <p className="text-[11px] font-medium tracking-[0.16em] text-primary uppercase">
-            Usaha tape
+            Tape ketan
           </p>
           <h1 className="font-heading text-xl leading-none">{APP_NAME}</h1>
         </div>

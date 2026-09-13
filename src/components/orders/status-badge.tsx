@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { STATUS_META } from "@/lib/constants"
 import { dueBadgeLabel } from "@/lib/format"
+import { remainingDebt } from "@/lib/payment"
 import { getDueKind, isActiveOrder } from "@/lib/priority"
 import type { Order, OrderStatus } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -38,10 +39,11 @@ export function DueBadge({ order }: { order: Order }) {
   )
 }
 
-export function UrgentBadge() {
+export function DebtBadge({ order }: { order: Order }) {
+  if (remainingDebt(order) <= 0) return null
   return (
     <Badge className="h-6 border-transparent bg-[oklch(0.55_0.16_35)] px-2.5 text-[11px] text-white">
-      Penting
+      Hutang
     </Badge>
   )
 }

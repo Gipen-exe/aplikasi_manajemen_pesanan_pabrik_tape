@@ -1,16 +1,20 @@
-import { FULFILLMENT_META, PAYMENT_META } from "./constants"
+import { APP_NAME, FULFILLMENT_META, PAYMENT_META, SOURCE_META } from "./constants"
 import { formatClock, relativeDayLabel } from "./dates"
+import { remainingDebt } from "./payment"
 import { getDueKind } from "./priority"
 import type { Order } from "./types"
 
-export function formatQuantity(order: Pick<Order, "quantity" | "unit">) {
-  const qty =
-    Number.isInteger(order.quantity) ? String(order.quantity) : order.quantity.toString()
-  return `${qty} ${order.unit}`
+export { remainingDebt }
+
+export function formatQuantity(order: Pick<Order, "quantity" | "packageLabel">) {
+  const qty = Number.isInteger(order.quantity)
+    ? String(order.quantity)
+    : order.quantity.toString()
+  return `${qty} ${order.packageLabel}`
 }
 
 export function formatProductLine(order: Order) {
-  return `${formatQuantity(order)} ${order.productLabel}`
+  return formatQuantity(order)
 }
 
 export function formatDueLine(order: Order, now = new Date()) {
@@ -30,10 +34,27 @@ export function formatRupiah(value: number) {
 }
 
 export function formatPayment(order: Order) {
-  if (order.price != null && order.price > 0) {
-    return `${PAYMENT_META[order.payment].label} · ${formatRupiah(order.price)}`
+  const total = order.price
+  const paid = order.paidAmount || 0
+  const debt = remainingDebt(order)
+
+  if (order.payment === "lunas" && total != null) {
+    return `${PAYMENT_META.lunas.label} · ${formatRupiah(total)}`
+  }
+  if (order.payment === "dp" && total != null) {
+    return `DP ${formatRupiah(paid)} · hutang ${formatRupiah(debt)}`
+  }
+  if (debt > 0) {
+    return `Hutang ${formatRupiah(debt)}`
+  }
+  if (total != null && total > 0) {
+    return `${PAYMENT_META[order.payment].label} · ${formatRupiah(total)}`
   }
   return PAYMENT_META[order.payment].label
+}
+
+export function formatSource(order: Order) {
+  return SOURCE_META[order.source].label
 }
 
 export function dueBadgeLabel(order: Order, now = new Date()) {
@@ -55,6 +76,10 @@ export function whatsappUrl(phone: string, message?: string) {
   const url = new URL(`https://wa.me/${intl}`)
   if (message) url.searchParams.set("text", message)
   return url.toString()
+}
+
+export function orderWhatsappMessage(order: Order) {
+  return `Assalamualaikum, pesanan ${formatProductLine(order)} atas nama ${order.customerName} dari ${APP_NAME}.`
 }
 
 export function createId() {

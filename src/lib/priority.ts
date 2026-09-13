@@ -1,4 +1,5 @@
 import { ACTIVE_STATUSES } from "./constants"
+import { remainingDebt } from "./payment"
 import { isSameDay, startOfDay } from "./dates"
 import type { Order } from "./types"
 
@@ -19,41 +20,28 @@ export function getDueKind(order: Order, now = new Date()): DueKind {
   return "later"
 }
 
-export function priorityScore(order: Order, now = new Date()) {
+export function priorityScore(order: Order) {
   if (!isActiveOrder(order)) return Number.MAX_SAFE_INTEGER
-
   const due = new Date(order.dueAt).getTime()
   const created = new Date(order.createdAt).getTime()
-  const kind = getDueKind(order, now)
-
-  let score = 0
-  if (order.urgent) score -= 20_000
-  if (kind === "overdue") score -= 10_000
-  if (kind === "today") score -= 4_000
-  if (kind === "tomorrow") score -= 1_000
-  if (order.status === "siap") score -= 300
-  if (order.status === "diproses") score -= 120
-
-  score += Math.floor(due / 60_000)
-  score += created / 1e15
-  return score
+  return due + created / 1e12
 }
 
-export function sortByPriority(orders: Order[], now = new Date()) {
-  return [...orders].sort((a, b) => priorityScore(a, now) - priorityScore(b, now))
+export function sortByPriority(orders: Order[]) {
+  return [...orders].sort((a, b) => priorityScore(a) - priorityScore(b))
 }
 
 export function summarizeQueue(orders: Order[], now = new Date()) {
   const active = orders.filter(isActiveOrder)
   return {
     active: active.length,
-    urgent: active.filter((order) => order.urgent).length,
     overdue: active.filter((order) => getDueKind(order, now) === "overdue").length,
     today: active.filter((order) => {
       const kind = getDueKind(order, now)
       return kind === "today" || kind === "overdue"
     }).length,
     ready: active.filter((order) => order.status === "siap").length,
+    debt: active.filter((order) => remainingDebt(order) > 0).length,
     dueTodayCount: active.filter((order) =>
       isSameDay(new Date(order.dueAt), now)
     ).length,

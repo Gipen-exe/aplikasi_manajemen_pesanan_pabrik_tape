@@ -33,9 +33,9 @@ export default function HomePage() {
       </section>
 
       <div className="grid grid-cols-3 gap-2">
-        <SummaryChip label="Penting" value={summary.urgent} tone="urgent" />
+        <SummaryChip label="Terlambat" value={summary.overdue} tone="urgent" />
         <SummaryChip label="Hari ini" value={summary.today} tone="today" />
-        <SummaryChip label="Siap" value={summary.ready} tone="ready" />
+        <SummaryChip label="Hutang" value={summary.debt} tone="debt" />
       </div>
 
       <Button
@@ -66,7 +66,7 @@ export default function HomePage() {
       {activeOrders.length === 0 ? (
         <EmptyState
           title="Antrian masih kosong"
-          description="Kalau ada yang pesan tape, catat di sini supaya tidak lupa siapa yang harus didahulukan."
+          description="Kalau ada yang pesan Tape Ketan Dasiti, catat di sini supaya tidak lupa siapa yang harus didahulukan."
           actionLabel="Catat pesanan"
           href="/pesanan/baru"
         />
@@ -75,7 +75,7 @@ export default function HomePage() {
           <div className="flex items-end justify-between">
             <p className="font-heading text-lg">Didahulukan dulu</p>
             <p className="text-xs text-muted-foreground">
-              penting, terlambat, lalu yang paling dekat
+              yang paling cepat diambil atau diantar
             </p>
           </div>
           {activeOrders.map((order) => (
@@ -95,12 +95,12 @@ function SummaryChip({
 }: {
   label: string
   value: number
-  tone: "urgent" | "today" | "ready"
+  tone: "urgent" | "today" | "debt"
 }) {
   const tones = {
     urgent: "bg-[oklch(0.95_0.03_35)] text-[oklch(0.42_0.12_30)]",
     today: "bg-[oklch(0.95_0.04_80)] text-[oklch(0.42_0.1_55)]",
-    ready: "bg-[oklch(0.95_0.03_145)] text-[oklch(0.36_0.08_145)]",
+    debt: "bg-[oklch(0.95_0.03_35)] text-[oklch(0.42_0.12_30)]",
   }
 
   return (

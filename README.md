@@ -1,17 +1,29 @@
-# Tape Leuwidingding — Kelola Pesanan
+# Tape Ketan Dasiti — Kelola Pesanan
 
-Aplikasi mobile-first untuk usaha tape di **Desa Leuwidingding, Cirebon**. Dibuat supaya pemilik tidak lupa siapa yang pesan, dan mana yang perlu didahulukan.
+Aplikasi mobile-first untuk **Tape Ketan Dasiti** di Desa Leuwidingding, Cirebon. Dipakai pemilik yang juga memproduksi, supaya tidak lupa siapa yang pesan dan mana yang harus lebih dulu diambil atau diantar.
 
 Buka di HP lewat browser, lalu **Tambahkan ke layar utama** supaya terasa seperti aplikasi.
 
 ## Yang bisa dilakukan
 
-- Catat pesanan: nama, WhatsApp, jenis tape, jumlah, kapan diambil/diantar
-- Antrian otomatis: **penting**, yang sudah **terlambat**, lalu yang **paling dekat** waktunya
-- Ubah status: baru → sedang dibuat → siap diambil → selesai
-- Cari nama atau catatan
-- Tandai penting, status bayar, dan harga
+- Catat pesanan Tape Ketan: ember besar/kecil, kotak 3000/2000/1500 ml, atau wadah custom
+- Harga otomatis sesuai wadah, bisa diubah kalau custom
+- Antrian dari yang **paling cepat** diambil atau diantar
+- Ambil di tempat atau diantar ke rumah pemesan
+- Catat asal pesanan (WhatsApp, datang, titip), DP, dan sisa hutang
+- Status: baru → sedang dibuat → siap → selesai
 - Cadangkan / pulihkan data (tersimpan di HP, tanpa akun)
+
+## Harga wadah
+
+| Wadah | Harga |
+| --- | --- |
+| Ember besar | Rp 110.000 |
+| Ember kecil | Rp 75.000 |
+| Kotak 3000ml | Rp 30.000 |
+| Kotak 2000ml | Rp 25.000 |
+| Kotak 1500ml | Rp 20.000 |
+| Wadah custom | menyesuaikan |
 
 ## Cara menjalankan
 

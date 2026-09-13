@@ -20,7 +20,7 @@ export default function Icon() {
           letterSpacing: -8,
         }}
       >
-        T
+        D
       </div>
     ),
     size

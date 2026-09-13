@@ -32,7 +32,7 @@ export default function OrdersPage() {
       return (
         order.customerName.toLowerCase().includes(q) ||
         order.phone.includes(q) ||
-        order.productLabel.toLowerCase().includes(q) ||
+        order.packageLabel.toLowerCase().includes(q) ||
         order.notes.toLowerCase().includes(q) ||
         order.address.toLowerCase().includes(q)
       )
@@ -46,7 +46,7 @@ export default function OrdersPage() {
       <div>
         <h2 className="font-heading text-2xl">Semua pesanan</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Cari nama, nomor, atau catatan. Urutannya tetap dari yang paling perlu didahulukan.
+          Cari nama, wadah, atau catatan. Urutannya dari yang paling cepat diambil atau diantar.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ export default function OrdersPage() {
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Cari Bu Enah, warung, tape ketan..."
+          placeholder="Cari Bu Enah, ember besar, kotak..."
           className="h-12 rounded-2xl pl-9 text-base"
         />
       </div>

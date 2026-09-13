@@ -3,8 +3,14 @@
 import Link from "next/link"
 import { MapPinIcon, MessageCircleIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DueBadge, StatusBadge, UrgentBadge } from "@/components/orders/status-badge"
-import { formatDueLine, formatPayment, formatProductLine, whatsappUrl } from "@/lib/format"
+import { DebtBadge, DueBadge, StatusBadge } from "@/components/orders/status-badge"
+import {
+  formatDueLine,
+  formatPayment,
+  formatProductLine,
+  orderWhatsappMessage,
+  whatsappUrl,
+} from "@/lib/format"
 import type { Order, OrderStatus } from "@/lib/types"
 
 const nextAction: Partial<
@@ -23,19 +29,14 @@ export function OrderCard({
   onStatus?: (id: string, status: OrderStatus) => void
 }) {
   const action = nextAction[order.status]
-  const wa = order.phone
-    ? whatsappUrl(
-        order.phone,
-        `Assalamualaikum, pesanan tape ${formatProductLine(order)} atas nama ${order.customerName} sudah kami catat.`
-      )
-    : null
+  const wa = order.phone ? whatsappUrl(order.phone, orderWhatsappMessage(order)) : null
 
   return (
     <article className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/8">
       <Link href={`/pesanan/${order.id}`} className="block space-y-3">
         <div className="flex flex-wrap items-center gap-1.5">
-          {order.urgent ? <UrgentBadge /> : null}
           <DueBadge order={order} />
+          <DebtBadge order={order} />
           <StatusBadge status={order.status} />
         </div>
         <div>

@@ -11,15 +11,19 @@ import {
 } from "lucide-react"
 import { PageHeader } from "@/components/app-shell"
 import { LoadingScreen } from "@/components/loading-screen"
-import { DueBadge, StatusBadge, UrgentBadge } from "@/components/orders/status-badge"
+import { DebtBadge, DueBadge, StatusBadge } from "@/components/orders/status-badge"
 import { Button } from "@/components/ui/button"
 import { useOrder, useOrders } from "@/hooks/use-orders"
-import { FULFILLMENT_META, STATUS_META } from "@/lib/constants"
+import { FULFILLMENT_META, PRODUCT_NAME, STATUS_META } from "@/lib/constants"
 import { formatLongDate } from "@/lib/dates"
 import {
   formatDueLine,
   formatPayment,
   formatProductLine,
+  formatRupiah,
+  formatSource,
+  orderWhatsappMessage,
+  remainingDebt,
   whatsappUrl,
 } from "@/lib/format"
 import type { OrderStatus } from "@/lib/types"
@@ -46,25 +50,23 @@ export default function OrderDetailPage() {
   }
 
   const wa = order.phone
-    ? whatsappUrl(
-        order.phone,
-        `Assalamualaikum, pesanan ${formatProductLine(order)} atas nama ${order.customerName} dari Tape Leuwidingding.`
-      )
+    ? whatsappUrl(order.phone, orderWhatsappMessage(order))
     : null
+  const debt = remainingDebt(order)
 
   return (
     <>
       <PageHeader title={order.customerName} backHref="/" />
       <div className="space-y-5 px-4 pt-5 pb-10">
         <div className="flex flex-wrap gap-1.5">
-          {order.urgent ? <UrgentBadge /> : null}
           <DueBadge order={order} />
+          <DebtBadge order={order} />
           <StatusBadge status={order.status} />
         </div>
 
         <section className="rounded-3xl bg-card p-4 shadow-sm ring-1 ring-foreground/8">
           <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Pesanan
+            {PRODUCT_NAME}
           </p>
           <p className="font-heading mt-1 text-2xl">{formatProductLine(order)}</p>
           <p className="mt-2 text-sm text-muted-foreground">{formatDueLine(order)}</p>
@@ -77,7 +79,13 @@ export default function OrderDetailPage() {
               {order.address}
             </p>
           ) : null}
-          <p className="mt-3 text-sm font-medium">{formatPayment(order)}</p>
+          <p className="mt-3 text-sm">Pesan lewat {formatSource(order)}</p>
+          <p className="mt-2 text-sm font-medium">{formatPayment(order)}</p>
+          {order.price != null && order.payment === "dp" ? (
+            <p className="mt-1 text-xs text-muted-foreground">
+              Total {formatRupiah(order.price)} · sisa {formatRupiah(debt)}
+            </p>
+          ) : null}
         </section>
 
         {order.notes ? (

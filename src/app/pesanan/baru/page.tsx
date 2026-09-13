@@ -14,7 +14,7 @@ export default function NewOrderPage() {
     <>
       <PageHeader
         title="Catat pesanan"
-        description="Isi nama, tape yang dipesan, dan kapan harus siap."
+        description="Isi nama, wadah Tape Ketan, dan kapan harus diambil atau diantar."
         backHref="/"
       />
       <div className="px-4 pt-5">

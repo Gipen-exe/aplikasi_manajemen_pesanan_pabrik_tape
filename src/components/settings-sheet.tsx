@@ -33,7 +33,7 @@ export function SettingsSheet({
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.href = url
-    link.download = `cadangan-pesanan-tape-${new Date().toISOString().slice(0, 10)}.json`
+    link.download = `cadangan-pesanan-dasiti-${new Date().toISOString().slice(0, 10)}.json`
     link.click()
     URL.revokeObjectURL(url)
     toast.success("Cadangan pesanan sudah diunduh.")
@@ -58,7 +58,8 @@ export function SettingsSheet({
         <SheetHeader>
           <SheetTitle className="font-heading text-xl">{APP_NAME}</SheetTitle>
           <SheetDescription>
-            Catatan pesanan usaha tape di {APP_PLACE}. Data tersimpan di HP ini.
+            Catatan pesanan {APP_NAME} di {APP_PLACE}. Dipakai pemilik yang juga
+            memproduksi. Data tersimpan di HP ini.
           </SheetDescription>
         </SheetHeader>
         <div className="space-y-2 px-4 pb-6">
