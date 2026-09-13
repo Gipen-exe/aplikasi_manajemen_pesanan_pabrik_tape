@@ -50,7 +50,11 @@ function withPackage(
 ): OrderDraft {
   const selected = PACKAGES.find((item) => item.id === packageId)
   const unitPrice =
-    packageId === "custom" ? draft.unitPrice : (selected?.price ?? null)
+    packageId === "custom"
+      ? draft.packageId === "custom"
+        ? draft.unitPrice
+        : null
+      : (selected?.price ?? null)
   const packageLabel =
     packageId === "custom"
       ? draft.packageId === "custom"
@@ -64,10 +68,10 @@ function withPackage(
     packageLabel,
     quantity,
     unitPrice,
-    price: unitPrice == null ? draft.price : unitPrice * quantity,
+    price: unitPrice == null ? null : unitPrice * quantity,
     paidAmount: settledAmount(
       draft.payment,
-      unitPrice == null ? draft.price : unitPrice * quantity,
+      unitPrice == null ? null : unitPrice * quantity,
       draft.paidAmount
     ),
   }
@@ -352,6 +356,7 @@ export function OrderForm({
                 })
               }}
               placeholder="Sesuaikan dengan wadahnya"
+              onFocus={(event) => event.currentTarget.select()}
               className="h-12 rounded-2xl px-3 text-base"
             />
           </Field>
@@ -410,6 +415,7 @@ export function OrderForm({
             }))
           }}
           placeholder="Otomatis dari wadah × jumlah"
+          onFocus={(event) => event.currentTarget.select()}
           className="h-12 rounded-2xl px-3 text-base"
         />
         {draft.unitPrice != null && draft.quantity > 1 ? (
@@ -447,6 +453,7 @@ export function OrderForm({
               }))
             }
             placeholder="Contoh: 50000"
+            onFocus={(event) => event.currentTarget.select()}
             className="h-12 rounded-2xl px-3 text-base"
           />
         </Field>
